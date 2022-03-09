@@ -5,6 +5,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
-        "classmap":["src/"]
+        "files":["src/Html.php","src/Form.php"]
     }
 }
