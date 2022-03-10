@@ -129,7 +129,7 @@ function Select($name, $options = array(), $selected = null){
 
 function Autocomplete($name, $datalist, $value = null, $placeholder = "") {
 
-	return "<input autocomplete='off' type='text' name='{$name}' value='{$value}' list='{$datalist}' placeholder='{$placeholder}' onchange='submitForm();' />";
+	return "<input autocomplete='off' type='text' name='{$name}' value='{$value}' list='{$datalist}' placeholder='{$placeholder}' />";
 }
 
 function Input($name) {
