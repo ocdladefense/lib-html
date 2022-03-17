@@ -121,7 +121,7 @@ function Select($name, $options = array(), $selected = null){
 
 	},array_keys($options),$options);
 
-	return createElement("select", array("name" => $name), $children);
+	return createElement("select", array("name" => $name, "id" => $name), $children);
 }
 
 
