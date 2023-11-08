@@ -99,27 +99,33 @@ function DataList($name, $values){
 
 
 
-// This REQUIRES an associative array.
-function Select($name, $options = array(), $selected = null){
+// Build a select element.
+// @param $name - the name to be assigned to this form element.
+// @param $options - an associative array; they keys are the option values and values are the option text.
+// @param $selected - the value of the selected option.
+function Select($name, $options = array(), $selected = null) {
 
 	// Create our options array for this select element.
-	$children = array_map(function($optValue, $optText) use ($selected){
+	$fn = function($value, $label) use ($selected){
 
 		// Only valid if we are considering 
 		// passing in a standard array.
 		// $text = ucwords($opt); // This gets displayed to the user.
+		$isSelected = strtolower($selected) == strtolower($value);
 
+		$props = array("value" => $value);
 
-		$isSelected = strtolower($selected) == strtolower($optValue);
-
-		$attrs = array("value" => $optValue);
 		if($isSelected) {
-			$attrs["selected"] = "";
+			$props["selected"] = "";
 		}
 
-		return array("name" => "option", "attrs" => $attrs, "children" => $optText);
+		return array("name" => "option", "attrs" => $props, "children" => $label);
+	};
 
-	},array_keys($options),$options);
+	$values = array_keys($options);
+	$labels = array_values($options);
+
+	$children = array_map($fn,$values,$labels);
 
 	return createElement("select", array("name" => $name, "id" => $name), $children);
 }
@@ -164,20 +170,16 @@ function Date($name, $value, $max = null){
 
 function createElement($tagName, $attrs, $children = null){
 
-	// Not all tags support all attributes.
-	$openTag = "<$tagName";
+	$fn = function($key,$value = null){
+		return null == $value ? $key : sprintf('%s="%s"', $key, $value);
+	};
 
-	foreach($attrs as $key => $value) {
+	$props = array_map($fn, array_keys($attrs), array_values($attrs));
 
-		$openTag .= " " . $key . "='" . $value ."'";
-	}
-
-	$openTag .= ">";
-
-
+	$openTag = "<$tagName ".implode(" ", $props) . ">";
 	$closeTag = "</$tagName>";
 
-	$theTag = $openTag . $closeTag;
+	// $elem = "<$tagName" . implode(" ", $props) . "</$tagName>";
 
 
 	if(!empty($children) && is_string($children)) {
